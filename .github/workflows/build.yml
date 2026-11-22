@@ -30,7 +30,7 @@ jobs:
           
       - name: Build APK
         run: |
-          bubblewrap build --directory . --skipPwaValidation --skipJdkValidation
+          echo "n" | bubblewrap build --directory . --skipPwaValidation
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
