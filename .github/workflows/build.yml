@@ -1,0 +1,26 @@
+name: Build APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install Tool
+        run: npm install -g hbh-web2app
+        
+      - name: Build APK
+        run: |
+          npx hbh-web2app --asset "./army-connect-source.zip" --appName "ARMY-CONNECT" --packageName "com.army.connect"
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-apk
+          path: output/**/*.apk
