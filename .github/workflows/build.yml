@@ -12,25 +12,28 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install Tool
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Unzip Source
         run: |
-          npm init -y
-          npm pkg set type="module"
-          npm install hbh-web2app
+          mkdir -p www
+          unzip army-connect-source.zip -d www/
+          
+      - name: Setup Bubblewrap (Google Tool)
+        run: |
+          npm install -g @bubblewrap/cli
+          bubblewrap init --manifest https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/cli/src/spec/manifest.json || true
           
       - name: Build APK
         run: |
-          node -e "
-          const { GenerateApp } = require('hbh-web2app');
-          GenerateApp({
-            appName: 'ARMY-CONNECT',
-            packageName: 'com.army.connect',
-            asset: './army-connect-source.zip'
-          });
-          "
+          bubblewrap build --directory . --skipPwaValidation
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: my-app-apk
-          path: output/**/*.apk
+          path: "*.apk"
