@@ -23,10 +23,30 @@ jobs:
           mkdir -p www
           unzip army-connect-source.zip -d www/
           
-      - name: Setup Bubblewrap (Google Tool)
+      - name: Setup Bubblewrap & Manifest
         run: |
           npm install -g @bubblewrap/cli
-          bubblewrap init --manifest https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/cli/src/spec/manifest.json || true
+          
+          # Yeh line manifest file banayegi taaki error na aaye
+          cat << 'EOF' > twa-manifest.json
+          {
+            "packageId": "com.army.connect",
+            "host": "armyconnect.local",
+            "name": "ARMY-CONNECT",
+            "launcherName": "ARMY-CONNECT",
+            "display": "standalone",
+            "themeColor": "#000000",
+            "navigationColor": "#000000",
+            "backgroundColor": "#000000",
+            "startUrl": "/",
+            "iconUrl": "https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/core/src/spec/icon512.png",
+            "webManifestUrl": "https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/core/src/spec/manifest.json",
+            "appVersionName": "1.0.0",
+            "appVersionCode": 1,
+            "generatorApp": "bubblewrap-cli",
+            "webviewFallback": false
+          }
+          EOF
           
       - name: Build APK
         run: |
