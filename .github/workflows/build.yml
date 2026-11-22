@@ -13,8 +13,11 @@ jobs:
           node-version: '18'
           
       - name: Install Tool
-        run: npm install hbh-web2app
-        
+        run: |
+          npm init -y
+          npm pkg set type="module"
+          npm install hbh-web2app
+          
       - name: Build APK
         run: |
           node -e "
